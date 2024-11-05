@@ -177,16 +177,16 @@ jobs:
 the test results are now automatically uploaded to Jira after every push to the main branch.
 
 The following images illustrate the issue we implemented beforehand in Jira:
-![Cucumber Overview](pics/Cucumber_overview.png)
+![Cucumber Overview](pics/Cucumber_overview.PNG)
 *Cucumber for Jira Overview.*
 
-![Cucumber for Jira not run](pics/Cucumber_not_run.png)
+![Cucumber for Jira not run](pics/Cucumber_not_run.PNG)
 *Cucumber for Jira, where the Scenarios have not been tested yet.*
 
-![Cucumber for Jira run](pics/Cucumber_run.png)
+![Cucumber for Jira run](pics/Cucumber_run.PNG)
 *Cucumber for Jira, where the Scenarios have been tested and the results have been uploaded with the GitHub Action.*
 
-![easeRequirements](pics/easeRequirements.png)
+![easeRequirements](pics/easeRequirements.PNG)
 *The issues from the Cucumber Plug-in can be imported to the easeRequirements Plug-in.*
 
 
