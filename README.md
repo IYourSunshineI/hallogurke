@@ -171,7 +171,7 @@ jobs:
           curl -X POST https://c4j.cucumber.io/ci/rest/api/results \
           -H "authorization: Bearer ${{ secrets.JIRA_TOKEN }}" \
           -H 'content-type: multipart/form-data' \
-          -F results_file=@cucumber-report.json \
+          -F results_file=@target/cucumber-report.json \
           -F language=jvm
 ```
 the test results are now automatically uploaded to Jira after every push to the main branch.
