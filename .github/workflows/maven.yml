@@ -27,3 +27,11 @@ jobs:
           cache: maven
       - name: Test
         run: mvn test
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Tests
+          path: reports/tests-*.json
+          reporter: jest-junit
