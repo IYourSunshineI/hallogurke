@@ -117,4 +117,90 @@ The class `IsItFriday` should not be in the `StepDefinitions` class. It should b
 code is located.
 
 ## Jira Plugin for Requirement Management
-TODO
+I have set up a Jira project and added the two plugins `easeRequirements` and `Cucumber for Jira`.
+After connecting the Jira project with this repository, the cucumber plugin automatically recognized the
+`is_it_friday_yet.feature` file and created a new requirement in Jira.
+
+After changing the Cucumber runner to the following code:
+```java
+package hellocucumber;
+
+import io.cucumber.junit.platform.engine.Cucumber;
+import org.junit.platform.suite.api.ConfigurationParameter;
+import org.junit.platform.suite.api.IncludeEngines;
+import org.junit.platform.suite.api.SelectPackages;
+import org.junit.platform.suite.api.Suite;
+
+import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
+
+@Suite
+@IncludeEngines("cucumber")
+@SelectPackages("hellocucumber")
+@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty, json:target/cucumber-report.json")
+public class RunCucumberTest {
+}
+```
+and adding the following GitHub Actions workflow:
+```yaml
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test
+        run: mvn test
+
+      - name: Upload Cucumber JSON Report to Jira
+        if: always()
+        run: |
+          curl -X POST https://c4j.cucumber.io/ci/rest/api/results \
+          -H "authorization: Bearer ${{ secrets.JIRA_TOKEN }}" \
+          -H 'content-type: multipart/form-data' \
+          -F results_file=@cucumber-report.json \
+          -F language=jvm
+```
+the test results are now automatically uploaded to Jira after every push to the main branch.
+
+The following images illustrate the issue we implemented beforehand in Jira:
+![Cucumber Overview](pics/Cucumber_overview.png)
+*Cucumber for Jira Overview.*
+
+![Cucumber for Jira not run](pics/Cucumber_not_run.png)
+*Cucumber for Jira, where the Scenarios have not been tested yet.*
+
+![Cucumber for Jira run](pics/Cucumber_run.png)
+*Cucumber for Jira, where the Scenarios have been tested and the results have been uploaded with the GitHub Action.*
+
+![easeRequirements](pics/easeRequirements.png)
+*The issues from the Cucumber Plug-in can be imported to the easeRequirements Plug-in.*
+
+
+## Conclusion
+### Cucumber
+Cucumber/Cucumber's Gherkin is actually a cool tool and ez to use. So I would recommend that we use it in our ASE project.
+
+### Jira
+#### Cucumber for Jira
+This plug-in is really nice and allows for a good overview of the Scenarios within our project. Especially the integration with the GitHub Actions which allow for
+automatic upload of the test results is a nice feature.
+
+#### easeRequirements
+I really do not get the point of this plug-in. It feels like it provides just another view of issues. The part where you can import issues from the Cucumber plug-in is nice
+but why have an extra plug-in for something we can already do with ``Cucumber for Jira``?
+
+All in all ``Cucumber for Jira`` is cool, `easeRequirements` feels unnecessary. However, I think we are not going to use any of them since we do not have a Jira license :)).
