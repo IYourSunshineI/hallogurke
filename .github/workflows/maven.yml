@@ -30,11 +30,10 @@ jobs:
         run: mvn test
 
       - name: Upload Cucumber JSON Report to Jira
-        env:
-          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+        if: always()
         run: |
           curl -X POST https://c4j.cucumber.io/ci/rest/api/results \
-          -H 'authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb20uc21hcnRiZWFyLmN1Y3VtYmVyIiwiYXVkIjoiY2kiLCJjb250ZXh0Ijp7ImxpdmluZ19kb2NfaWQiOjUwNjF9LCJpYXQiOjE3MzA4MDY1NzZ9.9BV97eG5UifKti-ZcZ9MOSvrjnkuW0UIs3wZKhHr8Lo' \
-          -H 'content-type: application/json' \
-          -F 'results_files[]'=@target/cucumber-report.json \
+          -H "authorization: Bearer ${{ secrets.JIRA_TOKEN }}" \
+          -H 'content-type: multipart/form-data' \
+          -F results_file=@cucumber-results.json \
           -F language=jvm
