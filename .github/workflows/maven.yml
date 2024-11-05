@@ -33,9 +33,6 @@ jobs:
         env:
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
         run: |
-          curl -X POST https://c4j.cucumber.io/ci/rest/api/results \
-          -H 'authorization: Bearer $JIRA_TOKEN' \
-          -H 'content-type: multipart/form-data' \
-          -F 'results_files[]'=@target/cucumber-report.json \
-          -F language=jvm
+          curl -X POST https://c4j.cucumber.io/ci/rest/api/results -H 'authorization: Bearer $JIRA_TOKEN' -H 'content-type: multipart/form-data' -F 'results_files[]'=@target/cucumber-report.json -F language=jvm
+          
           
