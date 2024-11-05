@@ -27,11 +27,8 @@ jobs:
           cache: maven
       - name: Test
         run: mvn test
-
-      - name: Test Report
-        uses: dorny/test-reporter@v1
+      - uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
-          name: Tests
-          path: reports/tests-*.json
-          reporter: jest-junit
+          name: test-results
+          path: jest-junit.json
