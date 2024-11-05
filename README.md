@@ -1,4 +1,5 @@
 # hellocucumber
+This is a test repo for ASE, where we checkout Cucumber's Gherking and explore Jira plug-ins :).
 
 ## Cucumber Integration
 
